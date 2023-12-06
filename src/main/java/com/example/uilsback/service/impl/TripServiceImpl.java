@@ -182,14 +182,8 @@ public class TripServiceImpl implements ITripService {
                 () -> new CustomException("No existe el viaje")
         );
 
-        User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(
-                () -> new CustomException("No existe el usuario")
-        );
-        System.out.println("hola1");
-        System.out.println(trip.getDepartureTime().compareTo(Time.valueOf(LocalTime.now())));
         if(trip.getDepartureTime().compareTo(Time.valueOf(LocalTime.now())) > 0 && userTripRepository.existsByTripIdAndUserId(tripId, Long.valueOf(userId))) {
             trip.setSeatsAvailable(trip.getSeatsAvailable() + 1);
-            System.out.println("hola2");
             tripRepository.save(trip);
             userTripRepository.deleteByTripIdAndUserId(tripId, Long.valueOf(userId));
             chatService.removeUserFromChat(trip.getChatId(), Long.valueOf(userId));
@@ -232,7 +226,8 @@ public class TripServiceImpl implements ITripService {
             return false;
         }
         userTrip.setStatus("inactive");
-        tripRepository.save(userTrip.getTrip());
+        userTripRepository.save(userTrip);
+        chatService.removeUserFromChat(userTrip.getTrip().getChatId(), Long.valueOf(userId));
         return true;
     }
 
@@ -244,7 +239,6 @@ public class TripServiceImpl implements ITripService {
             return finishTripDriver(tripId, userId);
         }
         if(user.getRole().toString().equals("passenger")) {
-            System.out.println("hola");
             return finishTripUser(tripId, userId);
         }
         return false;

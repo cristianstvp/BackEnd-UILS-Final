@@ -9,7 +9,7 @@ public interface IChatService {
 
     public boolean sendMessage(Long tripId, Long userId, String message);
 
-    public ChatDTO getChat(Long tripId);
+    public ChatDTO getChat(Long tripId, String userId);
 
     public Chat createChat(Long driverId);
 

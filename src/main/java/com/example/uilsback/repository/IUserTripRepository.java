@@ -18,8 +18,8 @@ public interface IUserTripRepository extends JpaRepository<UserTrip, Long> {
     @Query("SELECT v FROM UserTrip v WHERE v.userId = :userId AND v.status = :status")
     Optional<List<UserTrip>> findAllByUserIdAndStatus(Long userId, String status);
 
-    public boolean existsByTripIdAndUserId(Long tripId, Long userId);
+    boolean existsByTripIdAndUserId(Long tripId, Long userId);
 
-    public UserTrip findByTripIdAndUserId(Long tripId, Long userId);
+    UserTrip findByTripIdAndUserId(Long tripId, Long userId);
 
 }

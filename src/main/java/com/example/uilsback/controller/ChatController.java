@@ -23,9 +23,10 @@ public class ChatController {
     @PreAuthorize("hasAuthority('driver') || hasAuthority('passenger')")
     @GetMapping("/{tripId}")
     public ChatDTO getAllChats(
-            @PathVariable("tripId") Long tripId
+            @PathVariable("tripId") Long tripId,
+            @RequestHeader("idUsuario") String userId
     ) {
-        return chatService.getChat(tripId);
+        return chatService.getChat(tripId,userId);
     }
 
     @PreAuthorize("hasAuthority('driver') || hasAuthority('passenger')")

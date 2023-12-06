@@ -52,9 +52,12 @@ public class ChatServiceImpl implements IChatService {
         }
     }
 
-    public ChatDTO getChat(Long tripId) {
+    public ChatDTO getChat(Long tripId, String userId) {
         Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new CustomException("No existe el viaje"));
         Chat chat = trip.getChat();
+        if(!userChatRepository.existsByChatIdAndUserId(chat.getId(), Long.valueOf(userId))){
+            throw new CustomException("No puedes ver este chat");
+        }
         ChatDTO chatDTO = IChatMapper.INSTANCE.chatToChatDTO(chat);
         List<Message> messages = chat.getMessages();
         List<MessageDTO> messageDTOS = IMessageMapper.INSTANCE.messagesToMessageDTOs(messages);
@@ -71,7 +74,10 @@ public class ChatServiceImpl implements IChatService {
     }
 
     public void removeUserFromChat(Long chatId, Long userId) {
-        userChatRepository.deleteByChatIdAndUserId(chatId, userId);
+        System.out.println("hola");
+        System.out.println(chatId);
+        Integer hola = userChatRepository.deleteByChatIdAndUserId(chatId, userId);
+        System.out.println(hola);
     }
 
     public Chat createChat(Long driverId) {
